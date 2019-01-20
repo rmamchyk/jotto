@@ -6,7 +6,11 @@ import {getSecretWord} from './actions';
 import './App.scss';
 import Input from './components/Input';
 
-class App extends Component {
+export class UnconnectedApp extends Component {
+  componentDidMount() {
+    this.props.getSecretWord();
+  }
+
   render() {
     return (
       <div className="container">
@@ -28,4 +32,4 @@ export default connect(state => {
   }
 }, {
   getSecretWord
-})(App);
+})(UnconnectedApp);
