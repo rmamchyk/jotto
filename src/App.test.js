@@ -1,9 +1,40 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {shallow} from 'enzyme';
+import {storeFactory} from '../test/testUtils';
 import App from './App';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+const setup = (state={}) => {
+    const store = storeFactory(state);
+    return shallow(<App store={store} />).dive();
+}
+
+describe('redux properties', () => {
+    it('has access to `success` state', () => {
+        const success = true;
+        const wrapper = setup({success});
+        const successProp = wrapper.instance().props.success;
+        expect(successProp).toBe(success);
+    });
+
+    it('has access to `secretWord` state', () => {
+        const secretWord = 'party';
+        const wrapper = setup({secretWord});
+        const secretWordProp = wrapper.instance().props.secretWord;
+        expect(secretWordProp).toBe(secretWord);
+    });
+
+    it('has access to `guessedWords` state', () => {
+        const guessedWords = [{guessedWord: 'train', letterMatchCount: 3}];
+        const wrapper = setup({guessedWords});
+        const quessedWordsProp = wrapper.instance().props.guessedWords;
+        expect(quessedWordsProp).toEqual(guessedWords);
+    });
+
+    it('`getSecretWord` action creator is a function on the props', () => {
+        const wrapper = setup();
+        const getSecretWordProp = wrapper.instance().props.getSecretWord;
+        expect(getSecretWordProp).toBeInstanceOf(Function);
+    });
 });
+
+
