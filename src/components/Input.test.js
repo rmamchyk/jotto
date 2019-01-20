@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import {findByTestAttr, storeFactory} from '../../test/testUtils';
-import Input from './Input';
+import Input, {UnconnectedInput} from './Input';
 
 const setup = (initialState={}) => {
     const store = storeFactory(initialState);
@@ -68,5 +68,33 @@ describe('redux props', () => {
         const wrapper = setup();
         const guessWordProp = wrapper.instance().props.guessWord;
         expect(guessWordProp).toBeInstanceOf(Function);
+    });
+});
+
+describe('`guessWord` action call', () => {
+    let guessWordMock;
+    let wrapper;
+    const guessedWord = 'train';
+
+    beforeEach(() => {
+        guessWordMock = jest.fn();
+        const setupProps = {success: false, guessWord: guessWordMock};
+        wrapper = shallow(<UnconnectedInput {...setupProps} />);
+
+        // add value to input box
+        wrapper.instance().inputBox.current = {value: guessedWord};
+
+        // simulate submit button click
+        findByTestAttr(wrapper, 'submit-button').simulate('click', {preventDefault() {}});
+    });
+
+    it('calls `guessWord` action on submit button click', () => {
+        const guessWordCallCount = guessWordMock.mock.calls.length;
+        expect(guessWordCallCount).toBe(1);
+    }); 
+
+    it('calls `guessWord` with input value as argument', () => {
+        const guessWordArg = guessWordMock.mock.calls[0][0];
+        expect(guessWordArg).toBe(guessedWord);
     });
 });
