@@ -8,7 +8,7 @@ const fileContents = fs.readFileSync('./five-letter-words.json', 'utf-8');
 const words = JSON.parse(fileContents);
 const { fiveLetterWords } = words;
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   // select a random word
   const word = fiveLetterWords[Math.floor(Math.random() * fiveLetterWords.length)]
 
@@ -16,6 +16,6 @@ app.get('/', (req, res) => {
   res.send(word)
 })
 
-app.listen(3030, () => console.log('Word server listening on port 3030!'))
+app.listen(3001, () => console.log('Word server listening on port 3001!'))
 
 module.exports = app;

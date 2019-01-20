@@ -34,5 +34,6 @@
     "enzyme-adapter-react-16": "^1.7.1",
     "jest-cli": "^23.6.0",
     "moxios": "^0.4.0"
-  }
+  },
+  "proxy": "http://localhost:3001"
 }
